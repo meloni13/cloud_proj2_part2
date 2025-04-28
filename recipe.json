@@ -1,0 +1,51 @@
+{
+    "RecipeFormatVersion": "2020-01-25",
+    "ComponentName": "com.clientdevices.FaceDetection",
+    "ComponentVersion": "1.0.0",
+    "ComponentDescription": "Face Detection Component using MTCNN and MQTT subscription",
+    "ComponentPublisher": "ASU Student",
+    "ComponentDependencies": {
+      "aws.greengrass.TokenExchangeService": {
+        "VersionRequirement": ">=2.0.0 <3.0.0",
+        "DependencyType": "HARD"
+      }
+    },
+    "ComponentConfiguration": {
+      "DefaultConfiguration": {
+        "accessControl": {
+          "aws.greengrass.ipc.mqttproxy": {
+            "com.clientdevices.FaceDetection:mqttproxy:1": {
+              "policyDescription": "Allows access to publish/subscribe to all topics.",
+              "operations": [
+                "aws.greengrass#PublishToTopic",
+                "aws.greengrass#SubscribeToTopic"
+              ],
+              "resources": [
+                "*"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Manifests": [
+      {
+        "Platform": {
+          "os": "linux"
+        },
+        "Lifecycle": {
+          "install": "python3 -m pip install --upgrade pip && python3 -m pip install --no-cache-dir --user awsiotsdk boto3 numpy==1.24.4 torch==1.9.1+cpu torchvision==0.10.1+cpu torchaudio==0.9.1 --extra-index-url https://download.pytorch.org/whl/cpu",
+          "Run": "python3 -u {artifacts:path}/fd_component.py"
+        },
+        "Artifacts": [
+        {
+          "URI": "greengrass:artifacts/com.clientdevices.FaceDetection/1.0.0/fd_component.py"
+        },
+        {
+          "URI": "greengrass:artifacts/com.clientdevices.FaceDetection/1.0.0/facenet_pytorch"
+        }
+      ]
+      }
+    ]
+  }
+  
